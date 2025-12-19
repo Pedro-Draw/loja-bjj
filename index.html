@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BJJ Store | Elite Gear</title>
+    <link rel="icon" href="https://via.placeholder.com/32?text=BJJ" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="light-mode">
+    <div class="loja-container">
+        <header class="header-fixo">
+            <div class="header-topo">
+                <div class="logo">BJJ Store</div>
+                <div class="search-bar">
+                    <div class="search-input-container">
+                        <i class="fa fa-search search-icon"></i>
+                        <input type="text" id="inputBusca" placeholder="Buscar produtos...">
+                    </div>
+                </div>
+                <div class="header-icons">
+                    <button class="icon-btn" id="btnAdmin"><i class="fa fa-user"></i></button>
+                    <button class="icon-btn" id="btnFavoritos"><i class="fa fa-heart"></i><span class="badge" id="badgeFav">0</span></button>
+                    <button class="icon-btn" id="btnCarrinho"><i class="fa fa-shopping-cart"></i><span class="badge" id="badgeCart">0</span></button>
+                </div>
+            </div>
+            <div class="filtro-produtos">
+                <button class="filtro-btn active" data-categoria="">Todos</button>
+                <button class="filtro-btn" data-categoria="Kimono">Kimonos</button>
+                <button class="filtro-btn" data-categoria="Faixa">Faixas</button>
+                <button class="filtro-btn" data-categoria="Rashguard">Rashguards</button>
+                <button class="filtro-btn" data-categoria="Acessorio">Acessórios</button>
+            </div>
+        </header>
+        <div class="conteudo-rolavel">
+            <section class="banner-principal">
+                <h1>FOR FIGHTERS</h1>
+                <p>Equipamentos de elite para o seu Jiu-Jitsu</p>
+            </section>
+            <div class="produtos-grid" id="gridProdutos"></div>
+            <section class="bottom-hero">
+                <div class="hero-img">
+                    <div class="hero-text">
+                        <h2>COLEÇÃO 2025</h2>
+                        <p>Tecnologia avançada em cada fibra.</p>
+                    </div>
+                </div>
+            </section>
+            <footer class="main-footer">
+                <div class="footer-content">
+                    <div class="logo" style="color: white; margin-bottom: 15px;">BJJ Store</div>
+                    <p>Brasília, DF - Atendimento das 08h às 20h</p>
+                    <p>Siga-nos para novidades e promoções semanais.</p>
+                </div>
+                <div class="footer-social">
+                    <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram fa-2x"></i></a>
+                    <a href="https://wa.me/5561982610405" target="_blank"><i class="fab fa-whatsapp fa-2x"></i></a>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <div id="menuCarrinho" class="menu-lateral"></div>
+    <div id="menuFavoritos" class="menu-lateral"></div>
+    <div id="modalProduto" class="modal-overlay"></div>
+    <div id="modalEdit" class="modal-overlay"></div>
+    <script src="app.js"></script>
+</body>
+</html>
