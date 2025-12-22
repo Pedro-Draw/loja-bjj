@@ -62,7 +62,7 @@ body.light-mode {
 
 .header-icons {
     display: flex;
-    gap: 15px;
+    gap: 8px;
 }
 
 .icon-btn {
@@ -94,10 +94,9 @@ body.light-mode {
     display: flex;
     overflow-x: auto;
     gap: 10px;
-    margin-top: 10px;
+    margin: 10px auto 0;
     padding: 0 20px;
     max-width: 1200px;
-    margin: 10px auto 0;
 }
 
 .filtro-btn {
@@ -116,13 +115,14 @@ body.light-mode {
 
 /* BANNER PRINCIPAL */
 .banner-principal {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+        url('https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=1200&q=80');
+    background-size: cover;
+    background-position: center;
     background-color: #000;
     color: #fff;
     padding: 60px 20px;
     text-align: center;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=1200&q=80');
-    background-size: cover;
-    background-position: center;
 }
 
 .banner-principal h1 {
@@ -154,7 +154,7 @@ body.light-mode {
     margin: 0 auto;
 }
 
-/* CARDS */
+/* CARDS DE PRODUTO */
 .produto-card {
     background: white;
     border-radius: 15px;
@@ -162,6 +162,9 @@ body.light-mode {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .produto-card:hover {
@@ -177,19 +180,43 @@ body.light-mode {
 
 .card-conteudo {
     padding: 12px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .card-nome {
     font-size: 14px;
     font-weight: 700;
     margin: 0 0 5px;
-    height: 35px;
+}
+
+.card-descricao {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 8px;
+    line-height: 1.4;
+    max-height: 40px;
     overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.card-descricao.expandida {
+    max-height: 200px;
+}
+
+.ver-mais {
+    color: #0520f0;
+    font-size: 13px;
+    cursor: pointer;
+    align-self: flex-start;
+    margin-bottom: 8px;
 }
 
 .card-preco {
     color: #2ecc71;
     font-weight: 800;
+    margin-top: auto;
     margin-bottom: 10px;
 }
 
@@ -202,6 +229,45 @@ body.light-mode {
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
+}
+
+/* ÍCONE DE FAVORITO */
+.card-header {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.2s;
+    z-index: 20;
+}
+
+.produto-card:hover .card-header,
+.produto-card.favorito .card-header {
+    opacity: 1;
+    visibility: visible;
+}
+
+.card-header button {
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card-header i {
+    font-size: 18px;
+    color: #bbb;
+    transition: 0.3s;
+}
+
+.card-header i.favorited {
+    color: #ff3b30 !important;
 }
 
 /* MENUS LATERAIS */
@@ -232,6 +298,7 @@ body.light-mode {
     align-items: center;
     border-bottom: 1px solid #eee;
     padding-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .close-btn {
@@ -241,6 +308,11 @@ body.light-mode {
     font-weight: bold;
     color: #000;
     cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: color 0.3s;
 }
 
@@ -248,45 +320,65 @@ body.light-mode {
     color: #ff3b30;
 }
 
+/* CONTAINER ROLÁVEL */
+.menu-itens-container {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 5px;
+    margin-bottom: 15px;
+    min-width: 0;
+}
+
 /* ITENS DO CARRINHO */
 .item-carrinho {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-top: 15px;
+    margin-top: 10px;
     border-bottom: 1px solid #f9f9f9;
-    padding-bottom: 10px;
+    padding-bottom: 8px;
+    min-width: 0;
 }
 
 .item-carrinho img {
     width: 50px;
     height: 50px;
     border-radius: 5px;
+    object-fit: cover;
+    flex-shrink: 0;
 }
 
 .item-carrinho>div {
     flex: 1;
+    min-width: 0;
 }
 
 .qtd-controls {
     display: flex;
     align-items: center;
     gap: 5px;
+    flex-shrink: 0;
 }
 
 .qtd-controls button {
     background: #f0f0f0;
     border: none;
-    padding: 5px 10px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
     cursor: pointer;
+    font-weight: bold;
 }
 
 .btn-edit {
     background: #f0f0f0;
     border: none;
-    padding: 5px 10px;
+    padding: 6px 10px;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 13px;
+    flex-shrink: 0;
 }
 
 .btn-checkout {
@@ -301,44 +393,11 @@ body.light-mode {
     cursor: pointer;
 }
 
-/* ITENS FAVORITOS */
-.item-fav {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 15px;
-    border-bottom: 1px solid #f9f9f9;
-    padding-bottom: 10px;
-}
-
-.item-fav img {
-    width: 50px;
-    height: 50px;
-    border-radius: 5px;
-}
-
-.item-fav>div {
-    flex: 1;
-}
-
-.item-fav button {
-    background: #f0f0f0;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.item-fav button:nth-child(1) {
-    background: #ff3b30;
-    color: white;
-}
-
-/* CIRCLE CHECKBOX - CORRIGIDO PARA SER PERFEITAMENTE REDONDO */
+/* CIRCLE CHECKBOX */
 .circle-checkbox {
     appearance: none;
-    width: 24px;
-    height: 24px;
+    width: 24px !important;
+    height: 24px !important;
     min-width: 24px;
     border: 2px solid #ccc;
     border-radius: 50%;
@@ -348,6 +407,7 @@ body.light-mode {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .circle-checkbox:checked {
@@ -362,7 +422,7 @@ body.light-mode {
     border-radius: 50%;
 }
 
-/* MODAL - TAMANHO FIXO E CONSISTENTE */
+/* MODAL - CARD DETALHADO (COMPACTO E CORRIGIDO) */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -377,9 +437,9 @@ body.light-mode {
 .modal-conteudo {
     background: white;
     width: 100%;
-    max-width: 360px;
+    max-width: 280px;
     border-radius: 20px;
-    padding: 20px;
+    padding: 16px;
     position: relative;
     text-align: center;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -387,22 +447,24 @@ body.light-mode {
 
 .modal-imagem {
     width: 100%;
-    height: 280px;
+    height: 180px;
     object-fit: cover;
-    border-radius: 15px;
-    margin-bottom: 15px;
+    border-radius: 12px;
+    margin-bottom: 12px;
 }
 
 .modal-options {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-bottom: 15px;
+    gap: 10px;
+    margin-bottom: 12px;
+    text-align: left;
 }
 
 .modal-options label {
-    text-align: left;
     font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 4px;
 }
 
 .modal-options select,
@@ -411,13 +473,24 @@ body.light-mode {
     padding: 10px;
     border: 1px solid #eee;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.modal-options input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.modal-options input[type="number"]::-webkit-outer-spin-button,
+.modal-options input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 .modal-botoes {
     display: flex;
     gap: 10px;
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
 .btn-compartilhar {
@@ -429,28 +502,19 @@ body.light-mode {
     width: 50px;
 }
 
-.close-btn {
-    position: absolute;
-    left: 16px;
-    top: 16px;
-    background: none;
-    border: none;
-    font-size: 28px;
-    font-weight: bold;
-    color: #000;
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* TEXTOS DO MODAL */
+.modal-conteudo h3 {
+    font-size: 16px;
+    margin: 8px 0;
 }
 
-.close-btn:hover {
-    color: #ff3b30;
+.modal-conteudo p {
+    font-size: 14px;
+    color: #666;
+    margin: 8px 0;
 }
 
-/* BANNER INFERIOR */
+/* BANNER INFERIOR E FOOTER */
 .bottom-hero {
     margin: 30px 20px;
     border-radius: 20px;
@@ -478,7 +542,6 @@ body.light-mode {
     font-weight: 600;
 }
 
-/* FOOTER */
 .main-footer {
     background: #000;
     color: white;
@@ -497,6 +560,111 @@ body.light-mode {
     color: white;
 }
 
+/* ITENS DOS FAVORITOS - AGORA MAIS COMPACTOS */
+.item-fav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    /* reduzido */
+    border-bottom: 1px solid #f0f0f0;
+    min-width: 0;
+}
+
+.item-fav:last-child {
+    border-bottom: none;
+}
+
+.item-fav img {
+    width: 60px;
+    /* reduzido de 80px */
+    height: 60px;
+    object-fit: cover;
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+
+.item-fav>div {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.item-fav>div p:first-child {
+    font-weight: 700;
+    font-size: 14.5px;
+    /* reduzido de 16px */
+    margin: 0 0 4px 0;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.item-fav>div p:last-child {
+    font-weight: 700;
+    font-size: 16px;
+    /* reduzido de 18px */
+    color: #2ecc71;
+    margin: 0;
+}
+
+.item-fav button {
+    background: #f0f0f0;
+    border: none;
+    padding: 8px 12px;
+    /* reduzido */
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 13px;
+    /* reduzido de 14px */
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.item-fav button:first-of-type {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    color: #666;
+    margin-right: 6px;
+}
+
+.item-fav button:first-of-type:hover {
+    background: #f9f9f9;
+}
+
+.item-fav button:last-of-type {
+    background: #007bff;
+    color: white;
+}
+
+.item-fav button:last-of-type:hover {
+    background: #0056b3;
+}
+
+/* Responsivo para favoritos - mobile */
+@media (max-width: 480px) {
+    .item-fav {
+        gap: 10px;
+        padding: 10px 0;
+    }
+
+    .item-fav img {
+        width: 50px;
+        /* ainda menor no mobile */
+        height: 50px;
+    }
+
+    .item-fav button {
+        padding: 7px 10px;
+        font-size: 12.5px;
+    }
+}
+
 /* RESPONSIVIDADE */
 @media (min-width: 768px) {
     .produtos-grid {
@@ -506,11 +674,36 @@ body.light-mode {
     .filtro-produtos {
         justify-content: center;
     }
+
+    .produto-card .card-header {
+        display: flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        z-index: 20 !important;
+    }
 }
 
 @media (min-width: 1024px) {
     .produtos-grid {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
+@media (min-width: 1025px) {
+    .produto-card.favorito .card-header {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+@media (max-width: 767px) {
+    .produto-card .card-header {
+        display: flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        right: 8px !important;
+        top: 8px !important;
+        z-index: 20 !important;
     }
 }
 
@@ -544,4 +737,51 @@ body.light-mode {
     .card-imagem {
         height: 120px;
     }
+}
+
+/* OVERLAY ESCURO QUANDO MENU ABRE */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+/* Quando o menu está aberto, mostra o overlay */
+.menu-lateral.aberto~.menu-overlay,
+.menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* MELHORAR ANIMAÇÃO DO MENU LATERAL */
+.menu-lateral {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 100%;
+    max-width: 350px;
+    height: 100%;
+    background: white;
+    z-index: 2000;
+    transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+    box-shadow: none;
+    /* começa sem sombra */
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.menu-lateral.aberto {
+    right: 0;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+    /* sombra forte quando aberto = efeito flutuante */
 }
