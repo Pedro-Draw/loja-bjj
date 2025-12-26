@@ -231,43 +231,88 @@ body.light-mode {
     cursor: pointer;
 }
 
-/* ÍCONE DE FAVORITO */
+/* ÍCONE DE FAVORITO - ATUALIZADO PARA FUNCIONAR COM .favorito */
 .card-header {
     position: absolute;
     top: 10px;
     right: 10px;
     opacity: 0;
     visibility: hidden;
-    transition: 0.2s;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
     z-index: 20;
 }
 
+/* Sempre visível no mobile */
+@media (max-width: 767px) {
+    .card-header {
+        opacity: 1 !important;
+        visibility: visible !important;
+        top: 8px;
+        right: 8px;
+    }
+}
+
+/* Visível no hover (desktop) ou quando favoritado */
 .produto-card:hover .card-header,
 .produto-card.favorito .card-header {
     opacity: 1;
     visibility: visible;
 }
 
+/* Botão do coração */
 .card-header button {
-    background: white;
-    border: 2px solid #ddd;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(4px);
+    border: none;
     border-radius: 50%;
-    width: 34px;
-    height: 34px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
 }
 
+/* Ícone do coração */
 .card-header i {
-    font-size: 18px;
-    color: #bbb;
-    transition: 0.3s;
+    font-size: 20px;
+    color: #999;
+    /* cinza quando não favoritado */
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-.card-header i.favorited {
+/* Quando está favoritado → vermelho + animação Instagram */
+.produto-card.favorito .card-header i {
     color: #ff3b30 !important;
+    /* vermelho Instagram */
+    animation: heartBeat 0.6s ease-in-out;
+}
+
+@keyframes heartBeat {
+    0% {
+        transform: scale(1);
+    }
+
+    14% {
+        transform: scale(1.3);
+    }
+
+    28% {
+        transform: scale(1);
+    }
+
+    42% {
+        transform: scale(1.3);
+    }
+
+    70% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 /* MENUS LATERAIS */
@@ -280,16 +325,18 @@ body.light-mode {
     height: 100%;
     background: white;
     z-index: 2000;
-    transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+    box-shadow: none;
     padding: 20px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 .menu-lateral.aberto {
     right: 0;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
 }
 
 .menu-header {
@@ -372,13 +419,15 @@ body.light-mode {
 }
 
 .btn-edit {
-    background: #f0f0f0;
+    background: #007bff;
+    ;
     border: none;
     padding: 6px 10px;
-    border-radius: 5px;
+    border-radius: 15px;
     cursor: pointer;
     font-size: 13px;
     flex-shrink: 0;
+    color: #fcfdfd;
 }
 
 .btn-checkout {
@@ -422,7 +471,7 @@ body.light-mode {
     border-radius: 50%;
 }
 
-/* MODAL - CARD DETALHADO (COMPACTO E CORRIGIDO) */
+/* MODAL - CARD DETALHADO */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -560,13 +609,12 @@ body.light-mode {
     color: white;
 }
 
-/* ITENS DOS FAVORITOS - AGORA MAIS COMPACTOS */
+/* ITENS DOS FAVORITOS */
 .item-fav {
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 10px 0;
-    /* reduzido */
     border-bottom: 1px solid #f0f0f0;
     min-width: 0;
 }
@@ -577,7 +625,6 @@ body.light-mode {
 
 .item-fav img {
     width: 60px;
-    /* reduzido de 80px */
     height: 60px;
     object-fit: cover;
     border-radius: 12px;
@@ -595,7 +642,6 @@ body.light-mode {
 .item-fav>div p:first-child {
     font-weight: 700;
     font-size: 14.5px;
-    /* reduzido de 16px */
     margin: 0 0 4px 0;
     color: #333;
     overflow: hidden;
@@ -606,7 +652,6 @@ body.light-mode {
 .item-fav>div p:last-child {
     font-weight: 700;
     font-size: 16px;
-    /* reduzido de 18px */
     color: #2ecc71;
     margin: 0;
 }
@@ -615,11 +660,9 @@ body.light-mode {
     background: #f0f0f0;
     border: none;
     padding: 8px 12px;
-    /* reduzido */
     border-radius: 10px;
     font-weight: 600;
     font-size: 13px;
-    /* reduzido de 14px */
     cursor: pointer;
     transition: background 0.2s;
     white-space: nowrap;
@@ -1271,4 +1314,9 @@ body.light-mode {
     .admin-modal-footer {
         padding: 16px 20px;
     }
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
 }

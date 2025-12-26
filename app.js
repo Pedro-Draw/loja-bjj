@@ -1,4 +1,4 @@
-// BANCO DE DADOS EXPANDIDO
+// produtos.js
 import { produtosMock as produtosOriginais } from './produtos.js';
 
 let produtosMock = (JSON.parse(localStorage.getItem('produtosLoja')) || [...produtosOriginais]).map(p => ({
@@ -7,13 +7,52 @@ let produtosMock = (JSON.parse(localStorage.getItem('produtosLoja')) || [...prod
     isLimitedEdition: p.isLimitedEdition ?? false,
     isOutOfStock: p.isOutOfStock ?? false
 }));
-let carrinho = [];
-let favoritos = [];
-let filtroCategoria = '';
-let isAdmin = false;
+
+// ✅ ADICIONADO: Carregar carrinho do localStorage
+let carrinho = JSON.parse(localStorage.getItem('carrinhoLoja')) || [];
+
+let favoritos = JSON.parse(localStorage.getItem('favoritosLoja')) || [];
+let filtroCategoria = localStorage.getItem('filtroCategoria') || '';
+let filtroPromocao = localStorage.getItem('filtroPromocao') === 'true';      // NOVO
+let filtroLimitado = localStorage.getItem('filtroLimitado') === 'true';      // NOVO
+let ordenacaoPreco = localStorage.getItem('ordenacaoPreco') || '';           // NOVO: '' | 'asc' | 'desc'
+let isAdmin = localStorage.getItem('isAdminLoja') === 'true';
 
 function salvarProdutos() {
     localStorage.setItem('produtosLoja', JSON.stringify(produtosMock));
+}
+
+function salvarFavoritos() {
+    localStorage.setItem('favoritosLoja', JSON.stringify(favoritos));
+}
+
+// ✅ ADICIONADO: Função para salvar o carrinho
+function salvarCarrinho() {
+    localStorage.setItem('carrinhoLoja', JSON.stringify(carrinho));
+}
+
+// ✅ ADICIONADO: Salvar estados simples (filtro, admin, busca, scroll)
+function salvarEstado() {
+    localStorage.setItem('filtroCategoria', filtroCategoria);
+    localStorage.setItem('filtroPromocao', filtroPromocao);
+    localStorage.setItem('filtroLimitado', filtroLimitado);
+    localStorage.setItem('ordenacaoPreco', ordenacaoPreco);
+    localStorage.setItem('isAdminLoja', isAdmin);
+    const inputBusca = document.getElementById('inputBusca');
+    if (inputBusca) {
+        localStorage.setItem('textoBusca', inputBusca.value);
+    }
+    const conteudo = document.querySelector('.conteudo-rolavel');
+    if (conteudo) {
+        localStorage.setItem('scrollPosition', conteudo.scrollTop);
+    }
+}
+
+// ✅ ADICIONADO: Função central que chama tudo que precisa salvar com frequência
+function salvarTudo() {
+    salvarCarrinho();
+    salvarFavoritos();
+    salvarEstado();
 }
 
 function toggleBodyScroll(enable) {
@@ -22,27 +61,111 @@ function toggleBodyScroll(enable) {
 
 // INICIALIZAR
 document.addEventListener('DOMContentLoaded', () => {
+    // ✅ Restaurar busca salva
+    const inputBusca = document.getElementById('inputBusca');
+    const buscaSalva = localStorage.getItem('textoBusca');
+    if (buscaSalva !== null) {
+        inputBusca.value = buscaSalva;
+    }
+
+    // ✅ Restaurar filtro de categoria
+    if (filtroCategoria) {
+        document.querySelectorAll('.filtro-btn[data-categoria]').forEach(b => b.classList.remove('active'));
+        const btnAtivo = document.querySelector(`.filtro-btn[data-categoria="${filtroCategoria}"]`);
+        if (btnAtivo) btnAtivo.classList.add('active');
+    }
+
+    // ✅ Restaurar filtro de promoção
+    if (filtroPromocao) {
+        const btn = document.querySelector('.filtro-btn[data-filtro="promocao"]');
+        if (btn) btn.classList.add('active');
+    }
+
+    // ✅ Restaurar filtro de limitados
+    if (filtroLimitado) {
+        const btn = document.querySelector('.filtro-btn[data-filtro="limitado"]');
+        if (btn) btn.classList.add('active');
+    }
+
+    // ✅ Restaurar ordenação por preço
+    const selectOrdenacao = document.getElementById('ordenacaoPreco');
+    if (selectOrdenacao && ordenacaoPreco) {
+        selectOrdenacao.value = ordenacaoPreco;
+    }
+
+    // ✅ Restaurar posição do scroll
+    const conteudo = document.querySelector('.conteudo-rolavel');
+    const scrollSalvo = localStorage.getItem('scrollPosition');
+    if (conteudo && scrollSalvo) {
+        conteudo.scrollTop = parseInt(scrollSalvo, 10);
+    }
+
+    // ✅ Salvar busca e filtro ao mudar
+    inputBusca.addEventListener('input', salvarEstado);
+
+    // ✅ Salvar scroll ao rolar
+    conteudo.addEventListener('scroll', salvarEstado);
+
     renderizarProdutos();
-    document.getElementById('inputBusca').addEventListener('input', renderizarProdutos);
+    atualizarTudo(); // Atualiza badges com o carrinho carregado
+
     document.getElementById('btnCarrinho').onclick = () => toggleMenu('menuCarrinho');
     document.getElementById('btnFavoritos').onclick = () => toggleMenu('menuFavoritos');
     document.getElementById('btnAdmin').onclick = () => {
         if (isAdmin) {
             isAdmin = false;
+            salvarEstado();
             alert('🔒 Modo ADMIN desativado');
             renderizarProdutos();
         } else {
             abrirAdminLogin();
         }
     };
-    document.querySelectorAll('.filtro-btn').forEach(btn => {
+
+    // Filtros de categoria (já existentes)
+    document.querySelectorAll('.filtro-btn[data-categoria]').forEach(btn => {
         btn.onclick = () => {
-            document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.filtro-btn[data-categoria]').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             filtroCategoria = btn.dataset.categoria;
+            salvarEstado();
             renderizarProdutos();
         };
     });
+
+    // NOVO: Filtro Promoções
+    document.querySelector('.filtro-btn[data-filtro="promocao"]')?.addEventListener('click', () => {
+        const btn = document.querySelector('.filtro-btn[data-filtro="promocao"]');
+        filtroPromocao = !filtroPromocao;
+        if (filtroPromocao) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+        salvarEstado();
+        renderizarProdutos();
+    });
+
+    // NOVO: Filtro Limitados
+    document.querySelector('.filtro-btn[data-filtro="limitado"]')?.addEventListener('click', () => {
+        const btn = document.querySelector('.filtro-btn[data-filtro="limitado"]');
+        filtroLimitado = !filtroLimitado;
+        if (filtroLimitado) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+        salvarEstado();
+        renderizarProdutos();
+    });
+
+    // NOVO: Ordenação por preço
+    document.getElementById('ordenacaoPreco')?.addEventListener('change', (e) => {
+        ordenacaoPreco = e.target.value;
+        salvarEstado();
+        renderizarProdutos();
+    });
+
     // Fechar modal ao clicar fora
     document.getElementById('modalProduto').addEventListener('click', (e) => {
         if (e.target === document.getElementById('modalProduto')) {
@@ -59,10 +182,21 @@ document.addEventListener('DOMContentLoaded', () => {
 function renderizarProdutos() {
     const grid = document.getElementById('gridProdutos');
     const busca = document.getElementById('inputBusca').value.toLowerCase();
-    const filtrados = produtosMock.filter(p =>
+
+    let filtrados = produtosMock.filter(p =>
         p.nome.toLowerCase().includes(busca) &&
-        (filtroCategoria === '' || p.category === filtroCategoria)
+        (filtroCategoria === '' || p.category === filtroCategoria) &&
+        (!filtroPromocao || p.preco <= 150) &&                   // ← Ajuste este valor se quiser mudar o limite de promoção
+        (!filtroLimitado || p.isLimitedEdition === true)
     );
+
+    // Ordenação por preço
+    if (ordenacaoPreco === 'asc') {
+        filtrados.sort((a, b) => a.preco - b.preco);
+    } else if (ordenacaoPreco === 'desc') {
+        filtrados.sort((a, b) => b.preco - a.preco);
+    }
+
     grid.innerHTML = `
         ${isAdmin ? `
             <button class="btn-adicionar admin-add-btn" onclick="abrirAdminNovoProduto()">
@@ -71,8 +205,9 @@ function renderizarProdutos() {
         ` : ''}
     ` + filtrados.map(p => {
         const precoFormatado = p.preco.toFixed(2).replace('.', ',');
+        const isFavorito = favoritos.includes(p.id);
         return `
-        <div class="produto-card" onclick="abrirModal('${p.id}')">
+        <div class="produto-card ${isFavorito ? 'favorito' : ''}" onclick="abrirModal('${p.id}')">
             <img src="${p.img}" class="card-imagem" alt="${p.nome}">
             <div class="card-header">
                 ${isAdmin ? `
@@ -81,7 +216,7 @@ function renderizarProdutos() {
                     </button>
                 ` : `
                     <button onclick="event.stopPropagation(); toggleFav('${p.id}')" class="fav-btn">
-                        <i class="fa${favoritos.includes(p.id) ? 's' : 'r'} fa-heart"></i>
+                        <i class="fa${isFavorito ? 's' : 'r'} fa-heart"></i>
                     </button>
                 `}
             </div>
@@ -97,8 +232,9 @@ function renderizarProdutos() {
                 </button>
             </div>
         </div>
-    `;
+        `;
     }).join('');
+
     document.querySelectorAll('.card-descricao').forEach(desc => {
         const toggle = desc.nextElementSibling;
         if (desc.scrollHeight > 45) {
@@ -109,6 +245,8 @@ function renderizarProdutos() {
         }
     });
 }
+
+// O RESTO DO CÓDIGO CONTINUA EXATAMENTE COMO VOCÊ TINHA (sem alterações)
 
 window.toggleDesc = (id) => {
     const desc = document.getElementById(`desc-${id}`);
@@ -216,6 +354,7 @@ window.addToCartWithOptions = (id) => {
             uniqueId: 'cart_' + Date.now() + '_' + Math.floor(Math.random() * 1000000)
         });
     }
+    salvarTudo();
     atualizarTudo();
     renderizarCarrinho();
     toggleMenu('menuCarrinho');
@@ -266,6 +405,7 @@ window.salvarEdit = (uniqueId) => {
         item.color = newColor;
     }
     fecharModal('modalEdit');
+    salvarTudo();
     renderizarCarrinho();
 };
 
@@ -281,6 +421,7 @@ window.changeQtd = (uniqueId, delta) => {
     if (item.qtd <= 0) {
         carrinho = carrinho.filter(i => i.uniqueId !== uniqueId);
     }
+    salvarTudo();
     renderizarCarrinho();
     atualizarTudo();
 };
@@ -340,6 +481,7 @@ window.finalizarNoInstagram = () => {
 function atualizarTudo() {
     document.getElementById('badgeCart').innerText = carrinho.length;
     document.getElementById('badgeFav').innerText = favoritos.length;
+    salvarTudo();
 }
 
 function renderizarCarrinho() {
@@ -450,6 +592,8 @@ function renderizarFavoritos() {
 
 window.removerDosFavoritos = (id) => {
     favoritos = favoritos.filter(x => x !== id);
+    salvarFavoritos();
+    salvarTudo();
     atualizarTudo();
     renderizarProdutos();
     renderizarFavoritos();
@@ -487,15 +631,18 @@ window.toggleMenu = (id) => {
 };
 
 window.toggleFav = (id) => {
-    if (favoritos.includes(id)) {
-        removerDosFavoritos(id);
+    const index = favoritos.indexOf(id);
+    if (index > -1) {
+        favoritos.splice(index, 1);
     } else {
         favoritos.push(id);
-        atualizarTudo();
-        renderizarProdutos();
-        if (document.getElementById('menuFavoritos').classList.contains('aberto')) {
-            renderizarFavoritos();
-        }
+    }
+    salvarFavoritos();
+    salvarTudo();
+    atualizarTudo();
+    renderizarProdutos();
+    if (document.getElementById('menuFavoritos').classList.contains('aberto')) {
+        renderizarFavoritos();
     }
 };
 
@@ -527,6 +674,7 @@ window.verificarAdminLogin = () => {
     const senha = document.getElementById('admin-senha').value;
     if (email === 'pedro7.dev@gmail.com' && senha === 'pedrodev777') {
         isAdmin = true;
+        salvarEstado();
         alert('🔓 Modo ADMIN ativado');
         fecharModal('modalEdit');
         renderizarProdutos();
@@ -561,58 +709,48 @@ function abrirAdminFormulario(p, novo = false) {
     const modal = document.getElementById('modalEdit');
     modal.innerHTML = `
         <div class="admin-product-modal">
-            <!-- Header -->
             <div class="admin-modal-header">
                 <button class="close-btn" onclick="fecharModal('modalEdit')">&times;</button>
                 <h3 class="admin-modal-title">${novo ? '➕ Novo Produto' : '✏️ Editar Produto'}</h3>
             </div>
 
-            <!-- Scrollable Content -->
             <div class="admin-form-container">
                 <div class="admin-form-grid">
-                    <!-- Nome -->
                     <div class="form-group">
                         <label class="form-label">Nome do produto</label>
                         <input id="adm-nome" type="text" placeholder="Ex: Kimono Ultra Light" value="${p.nome}" class="form-input">
                     </div>
 
-                    <!-- Preço -->
                     <div class="form-group">
                         <label class="form-label">Preço (R$)</label>
                         <input id="adm-preco" type="number" step="0.01" placeholder="0.00" value="${p.preco}" class="form-input">
                     </div>
 
-                    <!-- Descrição -->
                     <div class="form-group">
                         <label class="form-label">Descrição</label>
                         <textarea id="adm-desc" placeholder="Descrição detalhada do produto..." rows="5" class="form-textarea">${p.desc}</textarea>
                     </div>
 
-                    <!-- Categoria -->
                     <div class="form-group">
                         <label class="form-label">Categoria</label>
                         <input id="adm-cat" type="text" placeholder="Ex: Kimono, Rashguard, Acessório" value="${p.category}" class="form-input">
                     </div>
 
-                    <!-- Tamanhos -->
                     <div class="form-group">
                         <label class="form-label">Tamanhos (separados por vírgula)</label>
                         <input id="adm-sizes" type="text" placeholder="A1, A2, A3, A4" value="${p.sizes.join(', ')}" class="form-input">
                     </div>
 
-                    <!-- Cores -->
                     <div class="form-group">
                         <label class="form-label">Cores (separadas por vírgula)</label>
                         <input id="adm-colors" type="text" placeholder="Branco, Preto, Azul" value="${p.colors.join(', ')}" class="form-input">
                     </div>
 
-                    <!-- Estoque -->
                     <div class="form-group">
                         <label class="form-label">Quantidade em estoque</label>
                         <input id="adm-stock" type="number" min="0" placeholder="0" value="${p.stockQuantity}" class="form-input">
                     </div>
 
-                    <!-- Checkboxes -->
                     <div class="checkboxes-container">
                         <label class="checkbox-label">
                             <input id="adm-limited" type="checkbox" ${p.isLimitedEdition ? 'checked' : ''}>
@@ -624,7 +762,6 @@ function abrirAdminFormulario(p, novo = false) {
                         </label>
                     </div>
 
-                    <!-- Imagem -->
                     <div class="form-group image-section">
                         <label class="form-label">Imagem do produto</label>
                         <input id="adm-img-url" type="text" placeholder="Cole a URL da imagem aqui" value="${p.img.startsWith('data:') ? '' : p.img}" class="form-input">
@@ -644,7 +781,6 @@ function abrirAdminFormulario(p, novo = false) {
                 </div>
             </div>
 
-            <!-- Botão Fixo no Final -->
             <div class="admin-modal-footer">
                 <button type="button" class="btn-save-product" onclick="salvarProdutoAdmin('${p.id}', ${novo})">
                     💾 Salvar Produto
@@ -656,7 +792,6 @@ function abrirAdminFormulario(p, novo = false) {
     modal.style.display = 'flex';
     toggleBodyScroll(false);
 
-    // Upload de imagem com preview
     const fileInput = document.getElementById('adm-img-file');
     fileInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
@@ -702,6 +837,15 @@ window.salvarProdutoAdmin = (id, novo) => {
         }
     }
     salvarProdutos();
+    salvarTudo();
     fecharModal('modalEdit');
     renderizarProdutos();
 };
+
+document.getElementById('btnVoltarTopo').addEventListener('click', () => {
+    const conteudo = document.querySelector('.conteudo-rolavel');
+    conteudo.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});

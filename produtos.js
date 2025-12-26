@@ -1,7 +1,6 @@
 // produtos.js
 export const produtosMock = [
     { id: "1", nome: "Kimono Ultra Light A1", preco: 489.90, desc: "Trançado leve para competição.", img: "https://m.media-amazon.com/images/I/61QuXkynwyL._AC_UF1000,1000_QL80_.jpg", category: "Kimono", sizes: ["A1", "A2", "A3", "A4"], colors: ["Branco", "Preto", "Azul"] },
-
     { id: "2", nome: "Faixa Preta Competition", preco: 95.00, desc: "12 costuras oficiais.", img: "./assets/bjjblack.jpg", category: "Faixa", sizes: ["A1", "A2", "A3", "A4"], colors: ["Branco", "Preto", "Azul"] },
     { id: "3", nome: "Rashguard Armor Black", preco: 149.90, desc: "Proteção UV e compressão.", img: "./assets/rash.jpg", category: "Rashguard", sizes: ["P", "M", "G", "GG"], colors: ["Preto", "Cinza"] },
     { id: "4", nome: "Bolsa de Treino 40L", preco: 210.00, desc: "Espaço para 2 kimonos.", img: "./assets/mochila.jpg", category: "Acessorio", sizes: ["Único"], colors: ["Preto"] },
@@ -9,7 +8,6 @@ export const produtosMock = [
     { id: "6", nome: "Shorts No-Gi Stealth", preco: 129.00, desc: "Abertura lateral para mobilidade.", img: "./assets/bermuda.jpg", category: "Acessorio", sizes: ["P", "M", "G", "GG"], colors: ["Preto", "Azul"] },
     { id: "7", nome: "Kneepad Gel Pro", preco: 85.00, desc: "Proteção extra para os joelhos.", img: "./assets/joelheira.jpg", category: "Acessorio", sizes: ["P", "M", "G"], colors: ["Preto"] },
     { id: "8", nome: "Chinelo BJJ Style", preco: 55.00, desc: "Conforto pós-treino.", img: "./assets/chinelo.jpg", category: "Acessorio", sizes: ["36-37", "38-39", "40-41", "42-43"], colors: ["Preto", "Branco"] },
-
     { id: "9", nome: "Kimono Samurai Edition Branco", preco: 699.90, desc: "Edição limitada com bordados samurai e tecido premium ultra-resistente.", img: "https://cdn.shopify.com/s/files/1/1229/2604/files/ISAMI_White_with_patches-horz_large.jpg?9263716183051758241", category: "Kimono", sizes: ["A1", "A2", "A3", "A4"], colors: ["Branco"] },
     { id: "10", nome: "Spats Compression Tao Black", preco: 139.90, desc: "Calça de compressão No-Gi com design tao para maior mobilidade.", img: "http://www.shogunfight.com/cdn/shop/products/Screen_Shot_2017-03-01_at_2.25.19_PM_1024x1024.jpg?v=1546010310", category: "Acessorio", sizes: ["P", "M", "G", "GG"], colors: ["Preto"] },
     { id: "11", nome: "Protetor de Orelha Elite Guard", preco: 149.90, desc: "Headgear ajustável para prevenir orelha de couve-flor.", img: "https://m.media-amazon.com/images/I/01UwfHrld%2BL._TSa%7Csize%3A1910%2C1000%7Cformat%3A%28A%2Cf%2Cb%2Cd%2Cpi%2Cpl%2Co%29%7Cb-src%3A61Cd2rJZgRL.png%7Cb-pos%3A0%2C0%2C1910%2C1000%7Cpi-src%3A7170MstW4CL.jpg%7Cpi-pos%3A1000%2C100%2C840%2C840.json", category: "Acessorio", sizes: ["Único"], colors: ["Preto"] },

@@ -17,7 +17,7 @@
     <div class="loja-container">
         <header class="header-fixo">
             <div class="header-topo">
-                <div class="logo">BJJ Store</div>
+                <a href="javascript:void(0)" id="btnVoltarTopo"><div class="logo">BJJ Store</div></a>
                 <div class="search-bar">
                     <div class="search-input-container">
                         <i class="fa fa-search search-icon"></i>
@@ -36,8 +36,20 @@
                 <button class="filtro-btn" data-categoria="Faixa">Faixas</button>
                 <button class="filtro-btn" data-categoria="Rashguard">Rashguards</button>
                 <button class="filtro-btn" data-categoria="Acessorio">Acessórios</button>
+                <button class="filtro-btn" data-filtro="promocao">🔥 Promoções</button>
+                <button class="filtro-btn" data-filtro="limitado">⭐ Limitados</button>
             </div>
+
+            <!-- NOVO: Select de ordenação por preço -->
+            <!-- <div class="ordenacao-container">
+                <select id="ordenacaoPreco" class="ordenacao-select">
+                    <option value="">Ordenar por</option>
+                    <option value="asc">Menor preço</option>
+                    <option value="desc">Maior preço</option>
+                </select>
+            </div> -->
         </header>
+
         <div class="conteudo-rolavel">
             <section class="banner-principal">
                 <h1>FOR FIGHTERS</h1>
@@ -68,12 +80,13 @@
             </footer>
         </div>
     </div>
+
     <div id="menuCarrinho" class="menu-lateral"></div>
     <div id="menuFavoritos" class="menu-lateral"></div>
     <div id="modalProduto" class="modal-overlay"></div>
     <div id="modalEdit" class="modal-overlay"></div>
     <div class="menu-overlay" id="menuOverlay"></div>
+
     <script type="module" src="app.js"></script>
-    <!-- <script src="app.js"></script> -->
 </body>
 </html>
